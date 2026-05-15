@@ -1,0 +1,26 @@
+<Project>
+  <Target Name="EnforceArchitectureRules" BeforeTargets="ResolveReferences">
+    <ItemGroup>
+      <_DomainPackageReference Include="@(PackageReference)"
+                               Condition="'$(MSBuildProjectName)' == 'LADCI.AI.Invoicing.Domain'" />
+      <_ApplicationInvalidReference Include="@(ProjectReference)"
+                                    Condition="'$(MSBuildProjectName)' == 'LADCI.AI.Invoicing.Application'
+                                    and ($([System.String]::Copy('%(Identity)').Contains('Infrastructure'))
+                                    or $([System.String]::Copy('%(Identity)').Contains('API')))" />
+      <_DomainInvalidReference Include="@(ProjectReference)"
+                               Condition="'$(MSBuildProjectName)' == 'LADCI.AI.Invoicing.Domain'" />
+      <_ApiInvalidPackageReference Include="@(PackageReference)"
+                                   Condition="'$(MSBuildProjectName)' == 'LADCI.AI.Invoicing.API'
+                                   and $([System.String]::Copy('%(Identity)').Contains('EntityFramework'))" />
+    </ItemGroup>
+
+    <Error Condition="'@(_DomainPackageReference)' != ''"
+           Text="Domain must have zero external dependencies. Remove PackageReference items from LADCI.AI.Invoicing.Domain." />
+    <Error Condition="'@(_DomainInvalidReference)' != ''"
+           Text="Domain must not reference other projects. It is the innermost layer." />
+    <Error Condition="'@(_ApplicationInvalidReference)' != ''"
+           Text="Application may orchestrate use cases only. It must not reference Infrastructure or API." />
+    <Error Condition="'@(_ApiInvalidPackageReference)' != ''"
+           Text="API is only a delivery mechanism. Move EF Core dependencies to Infrastructure." />
+  </Target>
+</Project>

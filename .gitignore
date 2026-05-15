@@ -1,0 +1,46 @@
+# Build output
+bin/
+obj/
+publish/
+artifacts/
+node_modules/
+**/node_modules/
+
+# Test output
+TestResults/
+coverage/
+coverage.*
+*.coverage
+*.coveragexml
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+
+# IDE and editor folders
+.vs/
+.vscode/
+.idea/
+
+# Rider
+*.sln.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local environment overrides
+.env
+.env.*
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+
+# Docker overrides
+docker-compose.override.yml

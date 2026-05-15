@@ -1,0 +1,49 @@
+bounded_contexts:
+  - name: Billing
+    description: Manages invoice creation, lifecycle, and payment status.
+
+aggregates:
+  - name: Invoice
+    description: Primary aggregate responsible for the invoice lifecycle.
+    root_entity: Invoice
+
+entities:
+  - name: Invoice
+    aggregate: Invoice
+    description: Represents a bill issued to a customer and tracks its payment state.
+    attributes:
+      - invoice_id
+      - customer_id
+      - issue_date
+      - due_date
+      - status
+      - line_items
+      - total_amount
+
+value_objects:
+  - name: InvoiceId
+    description: Unique identifier of an invoice.
+  - name: CustomerId
+    description: Identifier of the customer associated with the invoice.
+  - name: Money
+    description: Monetary amount with currency.
+  - name: InvoiceStatus
+    description: State of the invoice, such as Draft, Issued, or Paid.
+  - name: LineItem
+    description: Immutable description of a billed item, including quantity, unit price, and subtotal.
+  - name: DueDate
+    description: Date by which the invoice should be paid.
+
+domain_events:
+  - name: InvoiceCreated
+    description: Raised when a new invoice is created.
+  - name: InvoiceMarkedAsPaid
+    description: Raised when an invoice transitions to the Paid state.
+
+invariants:
+  - An invoice must have a unique identity.
+  - An invoice must contain at least one line item.
+  - The total amount of an invoice must equal the sum of its line items.
+  - An invoice can only be marked as paid if it exists.
+  - An invoice cannot be marked as paid more than once.
+  - A paid invoice must have status Paid.

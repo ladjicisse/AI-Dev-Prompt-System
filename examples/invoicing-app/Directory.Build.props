@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <RootNamespace>LADCI.AI.Invoicing</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>preview</LangVersion>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,29 @@
+stages:
+  - restore
+  - test
+  - publish
+
+variables:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  DOTNET_NOLOGO: "true"
+
+restore:
+  stage: restore
+  image: mcr.microsoft.com/dotnet/sdk:10.0
+  script:
+    - dotnet restore LADCI.AI.Invoicing.sln
+
+test:
+  stage: test
+  image: mcr.microsoft.com/dotnet/sdk:10.0
+  script:
+    - dotnet test LADCI.AI.Invoicing.sln --configuration Release --no-restore
+
+publish:
+  stage: publish
+  image: mcr.microsoft.com/dotnet/sdk:10.0
+  script:
+    - dotnet publish src/API/LADCI.AI.Invoicing.API.csproj --configuration Release --no-restore --output publish
+  artifacts:
+    paths:
+      - publish/
